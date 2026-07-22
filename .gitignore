@@ -27,3 +27,12 @@ htmlcov/
 # Beaker local state
 .beaker/
 beaker.conf
+
+# Agent session outputs. The subkernel's working directory is wherever
+# `beaker notebook` was launched, so figures and datasets the agent saves
+# during a session land in the repo root.
+/*.png
+*.nc
+*.tif
+*.grib
+*.zarr/
