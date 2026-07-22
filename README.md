@@ -41,9 +41,16 @@ the agent — multi-step data workflows, xarray shape juggling, reading referenc
 Small or heavily quantized models struggle.
 
 You don't need to configure anything up front. The first time the agent tries to reach the model
-without a key, Beaker opens a **Model Provider Configuration** dialog — pick your provider, paste
-the key, and carry on. (If you'd rather set it ahead of time, `beaker config update` does the same
-job from the terminal.)
+without a key, Beaker pops up a **Model Provider Configuration** dialog — pick your provider, paste
+the key, and carry on.
+
+You can also set it any time from the **gear icon** at the bottom-left, under `providers`. Pick the
+provider you're using, drop your key into `api_key`, and set `default_model_name` to the model you
+want:
+
+<img src="docs/api-key.png" alt="Setting the API key in Beaker Config" width="520">
+
+Then set the top-level `provider` field to match. Nothing needs restarting.
 
 ## Try it
 
