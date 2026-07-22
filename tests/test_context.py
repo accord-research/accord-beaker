@@ -58,11 +58,23 @@ async def test_system_preamble_is_present_and_specific():
 
 
 @pytest.mark.parametrize("name", REQUIRED_PROCEDURES)
-def test_required_procedures_exist_and_are_valid(context_dir, name):
-    """Each procedure must be both valid Python and a valid Jinja template.
+def test_required_procedures_are_registered_for_python3(name):
+    """Beaker must actually discover the procedure, not merely have the file.
 
-    Beaker renders procedures through Jinja before executing them, so a stray
-    brace breaks at runtime rather than at import.
+    get_code() resolves against the discovered set, so a procedure in the wrong
+    directory is indistinguishable from a missing one at runtime -- and setup()
+    swallows the failure by design.
+    """
+    procedures = AccordContext.discover_procedures()
+    assert name in procedures, f"{name} not discovered; found {sorted(procedures)}"
+    assert "python3" in procedures[name]["languages"]
+
+
+@pytest.mark.parametrize("name", REQUIRED_PROCEDURES)
+def test_required_procedures_are_valid_python_and_jinja(context_dir, name):
+    """Procedures are Jinja templates rendered before execution.
+
+    A stray brace therefore breaks at session start rather than at import.
     """
     path = context_dir / "procedures" / "python3" / f"{name}.py"
     assert path.is_file(), f"missing procedure: {path}"
