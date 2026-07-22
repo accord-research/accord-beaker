@@ -15,6 +15,22 @@ The agent learns these libraries from the [Agent Skills](https://agentskills.io/
 each library's own repository, loaded over the network at session start. Nothing is duplicated
 here — update a skill upstream and every `accord` notebook picks it up on its next session.
 
+## Demo
+
+A full seasonal forecast, driven entirely by conversation: fetch a CFSv2 predictor and an ERA5
+predictand, downscale with BCSD and CCA under leave-one-year-out cross-validation, produce a
+tercile probability forecast, and score it. Real data, no cuts — 8½ minutes at 6× speed.
+
+https://github.com/accord-research/accord-beaker/raw/main/docs/demo.mp4
+
+<video src="https://github.com/accord-research/accord-beaker/raw/main/docs/demo.mp4" controls muted playsinline width="100%"></video>
+
+> If the player does not appear, [download `docs/demo.mp4`](docs/demo.mp4).
+
+The forecast it produces has *negative* skill (RPSS −0.096, GROC 0.507) — a single-member CFSv2
+hindcast genuinely carries little signal for MAM rainfall over this domain. That is the honest
+result, and the agent says so rather than dressing it up.
+
 ## Installation
 
 Not published to PyPI — install from the repository:
