@@ -40,17 +40,16 @@ Beaker drives a commercial LLM. Any of these work:
 the agent — multi-step data workflows, xarray shape juggling, reading reference docs mid-task.
 Small or heavily quantized models struggle.
 
-You don't need to configure anything up front. The first time the agent tries to reach the model
-without a key, Beaker pops up a **Model Provider Configuration** dialog — pick your provider, paste
-the key, and carry on.
+You don't need to configure anything up front. The first time the agent tries to reach a model it
+can't authenticate to, Beaker pops up this dialog:
 
-You can also set it any time from the **gear icon** at the bottom-left, under `providers`. Pick the
-provider you're using, drop your key into `api_key`, and set `default_model_name` to the model you
-want:
+<img src="docs/provider-modal.png" alt="Model Provider Configuration dialog" width="620">
 
-<img src="docs/api-key.png" alt="Setting the API key in Beaker Config" width="520">
+Pick your provider from the list on the left, set `default_model_name` to the model you want, paste
+your key into `api_key`, and hit **Save**. Nothing needs restarting — your query retries from there.
 
-Then set the top-level `provider` field to match. Nothing needs restarting.
+(To change it later without waiting for a failure, the **gear icon** at the bottom-left opens the
+same settings under `providers`.)
 
 ## Try it
 
