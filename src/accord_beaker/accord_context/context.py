@@ -1,5 +1,7 @@
+import inspect
 import logging
-from typing import Any, Dict, Optional, TYPE_CHECKING
+from pathlib import Path
+from typing import Any, ClassVar, Dict, Optional, TYPE_CHECKING
 
 from beaker_notebook.lib import BeakerContext
 
@@ -7,6 +9,7 @@ from .agent import AccordAgent
 
 if TYPE_CHECKING:
     from beaker_notebook.kernel import BeakerKernel
+    from beaker_notebook.lib.integrations.base import BaseIntegrationProvider
 
 logger = logging.getLogger(__name__)
 
@@ -26,8 +29,46 @@ class AccordContext(BeakerContext):
 
     compatible_subkernels = ["python3"]
 
+    #: Whether to also offer the skills installed in the user's global skill
+    #: directories (``~/.beaker/skills``, ``~/.agents/skills``, and the
+    #: equivalents beside the notebook). Off by default -- see
+    #: :meth:`default_integration_providers`. Flip to True to opt back in.
+    INCLUDE_GLOBAL_SKILLS: ClassVar[bool] = False
+
     def __init__(self, beaker_kernel: "BeakerKernel", config: Optional[Dict[str, Any]] = None):
         super().__init__(beaker_kernel, config=config)
+
+    @property
+    def default_integration_providers(self) -> "list[BaseIntegrationProvider]":
+        """Drop the globally-installed skills unless explicitly opted in.
+
+        Beaker offers every context the skills it finds in the user's global
+        directories, on top of the context's own. For a general-purpose context
+        that is the right default. For a focused one it is actively harmful: a
+        developer with a large personal skill library hands this agent a hundred
+        or more unrelated skills, and every one of their descriptions is
+        injected into the system prompt on every session -- measured at ~24k
+        tokens on one real machine. The cost is not only the tokens. The agent
+        has to pick rosetta and deepscale out of that field, and skills whose
+        descriptions overlap on words like "data" or "forecast" are a genuine
+        source of wrong turns.
+
+        Builds the provider outright rather than filtering Beaker's list. There
+        is no reliable way to tell the two apart in 2.0.9: both get a random
+        ``id``, and ``display_name`` is written to the *class* by
+        ``BaseIntegrationProvider.__init__`` (``self.__class__.display_name =
+        display_name``), so every instance reports whichever name was set last.
+        """
+        if self.INCLUDE_GLOBAL_SKILLS:
+            return list(super().default_integration_providers)
+
+        from beaker_notebook.lib.integrations.skill import SkillIntegrationProvider
+
+        skills_file = Path(inspect.getabsfile(self.__class__)).parent / "skills.json"
+        if not skills_file.is_file():
+            logger.warning("No skills.json beside %s; the agent will have no skills.", __name__)
+            return []
+        return [SkillIntegrationProvider("ACCORD Skills", skill_paths=[str(skills_file)])]
 
     async def setup(self, context_info=None, parent_header=None):
         """Import the ACCORD stack into the subkernel so it is ready to use.

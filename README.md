@@ -95,6 +95,19 @@ Beaker appends `SKILL.md` to each URL and lazily fetches `references/` files off
 the agent asks for them. The trailing slash matters — without it Beaker strips the last path
 segment. A skill does **not** need its own repository; a URL pointing into a subdirectory works.
 
+### Your global skills are suppressed here
+
+Beaker normally offers every context the skills installed in `~/.beaker/skills`, `~/.agents/skills`
+and the equivalents beside the notebook, on top of the context's own. This context turns that off.
+
+On a machine with a large personal skill library the cost is real: 137 unrelated skills measured at
+**~24k tokens of prompt in every session**, before the agent does anything. And the agent then has
+to pick rosetta and deepscale out of that field — skills whose descriptions collide on words like
+"data" and "forecast" are a genuine source of wrong turns. Suppressed, the skill prompt is ~564
+tokens.
+
+To opt back in, set `INCLUDE_GLOBAL_SKILLS = True` on `AccordContext`.
+
 **These URLs track `main` and are not pinned.** That is deliberate: skills stay current without a
 release here. The cost is that an upstream change reaches every notebook immediately. To pin,
 replace `main` with a tag or commit SHA. The daily `Upstream health` workflow re-resolves

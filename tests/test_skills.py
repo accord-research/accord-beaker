@@ -112,6 +112,41 @@ def test_every_advertised_resource_resolves(skill_provider, slug):
 
 
 @pytest.mark.network
+def test_context_exposes_only_its_own_skills():
+    """The user's globally-installed skills must not leak into this context.
+
+    Beaker offers every context the skills in ~/.beaker/skills and friends. On a
+    machine with a large personal skill library that is both a large permanent
+    prompt cost and a retrieval problem -- the agent has to find rosetta and
+    deepscale among everything else.
+    """
+    from accord_beaker.accord_context.context import AccordContext
+
+    context = AccordContext.__new__(AccordContext)  # the property needs no kernel
+    exposed = {
+        skill.slug
+        for provider in context.default_integration_providers
+        for skill in getattr(provider, "_skills", [])
+    }
+    assert exposed == EXPECTED_SKILLS
+
+
+@pytest.mark.network
+def test_global_skills_remain_opt_in(monkeypatch):
+    """Suppression is a default, not a hard-coded refusal."""
+    from accord_beaker.accord_context.context import AccordContext
+
+    monkeypatch.setattr(AccordContext, "INCLUDE_GLOBAL_SKILLS", True)
+    context = AccordContext.__new__(AccordContext)
+    exposed = {
+        skill.slug
+        for provider in context.default_integration_providers
+        for skill in getattr(provider, "_skills", [])
+    }
+    assert EXPECTED_SKILLS <= exposed
+
+
+@pytest.mark.network
 @pytest.mark.xfail(
     strict=False,
     reason=(
