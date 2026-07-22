@@ -1,0 +1,32 @@
+name: Skill health
+
+# The agent's skills are fetched from rosetta and deepscale `main` at session
+# start, so upstream changes reach every notebook with no release here. Beaker
+# drops a skill it cannot load without surfacing an error, which means a broken
+# or moved skill degrades the agent silently. This job is the alarm: it fetches
+# both skills for real and fails loudly when one stops resolving.
+
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+  push:
+    paths:
+      - "src/accord_beaker/accord_context/skills.json"
+      - ".github/workflows/skill-health.yml"
+
+jobs:
+  fetch-skills:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: uv sync --extra dev
+
+      - name: Fetch the live skills
+        run: uv run pytest -q -m network

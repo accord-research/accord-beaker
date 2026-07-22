@@ -1,0 +1,72 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "accord-beaker"
+version = "0.1.0"
+description = "Beaker notebook context for ACCORD seasonal climate forecasting, pairing the rosetta and deepscale agent skills"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "accord-research" }]
+keywords = ["beaker", "climate", "seasonal-forecasting", "agent-skills", "notebook"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Atmospheric Science",
+]
+dependencies = [
+  "beaker-notebook~=2.0.9",
+  "accord-rosetta>=0.1.5",
+  "accord-deepscale>=0.1.5",
+]
+
+[project.urls]
+Homepage = "https://github.com/accord-research/accord-beaker"
+Repository = "https://github.com/accord-research/accord-beaker"
+Issues = "https://github.com/accord-research/accord-beaker/issues"
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-asyncio"]
+
+[tool.uv]
+# rosetta's dependency set is not satisfiable out of the box: sheerwater
+# hard-pins zarr==2.18.3 while icechunk>=2 needs zarr>=3.1.0. rosetta carries
+# this same override, but `uv pip install` reads overrides from the project in
+# the working directory rather than from the package being installed, so every
+# downstream consumer has to repeat it. sheerwater's pin is stale -- it reads
+# through xarray's zarr backend and works fine under zarr 3.
+override-dependencies = ["zarr>=3.1.0"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/accord_beaker"]
+
+# Beaker's build hook scans the package for BeakerContext subclasses and emits
+# the metadata that makes the context discoverable after install. It has to
+# import the context module, so the runtime dependencies must be present.
+[tool.hatch.build.hooks.beaker]
+require-runtime-dependencies = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+markers = [
+  "network: requires live network access to raw.githubusercontent.com",
+]
+
+[tool.coverage.run]
+source_pkgs = ["accord_beaker", "tests"]
+branch = true
+parallel = true
+omit = []
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
