@@ -12,7 +12,7 @@ You describe the forecast you want; it writes and runs the code.
 ![Demo](docs/demo.gif)
 
 *A full forecast end to end — CFSv2 predictor, ERA5 predictand, BCSD vs CCA under cross-validation,
-tercile forecast, skill scores. 8½ minutes at 16×; [full-speed video](docs/demo.mp4).*
+tercile forecast, skill scores. 8½ minutes at 20×; [full-speed video](docs/demo.mp4).*
 
 ## Get started
 
