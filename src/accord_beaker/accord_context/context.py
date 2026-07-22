@@ -27,6 +27,13 @@ class AccordContext(BeakerContext):
     AGENT_CLS = AccordAgent
     SLUG = "accord"
 
+    #: Beaker starts whichever installed context has the lowest weight, and
+    #: sorts the context dropdown by it. The built-in DefaultContext is 10, so
+    #: anything below that makes this the one a session opens on -- which is the
+    #: point of installing this package. Set BEAKER_DEFAULT_CONTEXT=default to
+    #: override for a single run without uninstalling.
+    WEIGHT = 5
+
     compatible_subkernels = ["python3"]
 
     #: Whether to also offer the skills installed in the user's global skill

@@ -25,11 +25,16 @@ cd accord-beaker
 uv sync --extra dev
 ```
 
-Then start Beaker and choose the **accord** context:
+Then start Beaker:
 
 ```bash
 uv run beaker notebook
 ```
+
+Sessions open on the **accord** context automatically — installing this package sets
+`AccordContext.WEIGHT = 5`, below the built-in default's 10, and Beaker starts whichever installed
+context has the lowest weight. The stock `default` context is still there in the dropdown, and
+`BEAKER_DEFAULT_CONTEXT=default` overrides for a single run.
 
 Confirm the context registered:
 

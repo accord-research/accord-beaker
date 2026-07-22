@@ -24,6 +24,28 @@ def test_context_declares_expected_identity():
     assert AccordContext.compatible_subkernels == ["python3"]
 
 
+def test_accord_is_the_context_a_session_opens_on():
+    """Installing this package should make `accord` the default context.
+
+    Beaker picks the installed context with the lowest WEIGHT (see
+    BeakerKernel.start_default_context) and sorts the dropdown the same way.
+    Ties are broken by dict order, so being strictly lower than every other
+    installed context is what makes this deterministic.
+    """
+    from beaker_notebook.lib.context import autodiscover_contexts
+
+    contexts = {
+        slug: cls for slug, cls in autodiscover_contexts().items() if cls is not None
+    }
+    winner = min(contexts.items(), key=lambda item: item[1].WEIGHT)
+    assert winner[0] == "accord", (
+        f"'{winner[0]}' would load first "
+        f"({ {s: c.WEIGHT for s, c in contexts.items()} })"
+    )
+    others = [c.WEIGHT for s, c in contexts.items() if s != "accord"]
+    assert all(AccordContext.WEIGHT < w for w in others), "weight must be strictly lowest"
+
+
 def test_context_is_discoverable_by_beaker():
     """Beaker finds contexts through entry points written by its build hook.
 
