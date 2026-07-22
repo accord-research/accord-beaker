@@ -60,11 +60,17 @@ class AccordContext(BeakerContext):
         descriptions overlap on words like "data" or "forecast" are a genuine
         source of wrong turns.
 
-        Builds the provider outright rather than filtering Beaker's list. There
-        is no reliable way to tell the two apart in 2.0.9: both get a random
-        ``id``, and ``display_name`` is written to the *class* by
+        Builds the provider outright rather than filtering Beaker's list, because
+        in 2.0.9 the two are not distinguishable: both get a random ``id``, and
+        ``display_name`` is written to the *class* by
         ``BaseIntegrationProvider.__init__`` (``self.__class__.display_name =
         display_name``), so every instance reports whichever name was set last.
+        Filtering on either silently matches nothing.
+
+        Passes ``skill_paths`` by keyword and nothing positionally. The first
+        positional argument is ``display_name`` in 2.0.9 but ``id`` on the dev
+        line, which removed ``display_name`` from the constructor -- so a
+        positional string quietly changes meaning across versions.
         """
         if self.INCLUDE_GLOBAL_SKILLS:
             return list(super().default_integration_providers)
@@ -75,7 +81,7 @@ class AccordContext(BeakerContext):
         if not skills_file.is_file():
             logger.warning("No skills.json beside %s; the agent will have no skills.", __name__)
             return []
-        return [SkillIntegrationProvider("ACCORD Skills", skill_paths=[str(skills_file)])]
+        return [SkillIntegrationProvider(skill_paths=[str(skills_file)])]
 
     async def setup(self, context_info=None, parent_header=None):
         """Import the ACCORD stack into the subkernel so it is ready to use.

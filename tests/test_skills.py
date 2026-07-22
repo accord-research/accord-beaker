@@ -133,17 +133,47 @@ def test_context_exposes_only_its_own_skills():
 
 @pytest.mark.network
 def test_global_skills_remain_opt_in(monkeypatch):
-    """Suppression is a default, not a hard-coded refusal."""
+    """Suppression is a default, not a hard-coded refusal.
+
+    Asserts that opting in stops filtering and hands back whatever Beaker
+    attached -- deliberately not which skills those are. Beaker moved that
+    around: 2.0.9 returns the context's own skills from this property too,
+    while the dev line splits them into `context_integration_providers`. Only
+    the "does it filter" question is stable across both.
+    """
+    from beaker_notebook.lib import BeakerContext
+
     from accord_beaker.accord_context.context import AccordContext
 
-    monkeypatch.setattr(AccordContext, "INCLUDE_GLOBAL_SKILLS", True)
     context = AccordContext.__new__(AccordContext)
-    exposed = {
+    attached_by_beaker = list(BeakerContext.default_integration_providers.fget(context))
+
+    monkeypatch.setattr(AccordContext, "INCLUDE_GLOBAL_SKILLS", True)
+    assert len(list(context.default_integration_providers)) == len(attached_by_beaker)
+
+    monkeypatch.setattr(AccordContext, "INCLUDE_GLOBAL_SKILLS", False)
+    suppressed = {
         skill.slug
         for provider in context.default_integration_providers
         for skill in getattr(provider, "_skills", [])
     }
-    assert EXPECTED_SKILLS <= exposed
+    assert suppressed == EXPECTED_SKILLS
+
+    # The behavioural claim, when there is actually something to opt into.
+    global_skills = {
+        skill.slug
+        for provider in attached_by_beaker
+        for skill in getattr(provider, "_skills", [])
+    } - EXPECTED_SKILLS
+    if not global_skills:
+        pytest.skip("no global skills installed here, so nothing to opt into")
+    monkeypatch.setattr(AccordContext, "INCLUDE_GLOBAL_SKILLS", True)
+    opted_in = {
+        skill.slug
+        for provider in context.default_integration_providers
+        for skill in getattr(provider, "_skills", [])
+    }
+    assert global_skills <= opted_in
 
 
 @pytest.mark.network
