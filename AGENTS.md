@@ -59,10 +59,11 @@ uv run pytest                    # adds live skill fetches
 ```
 
 Network tests fetch the real skills from GitHub. They run on a daily schedule
-(`.github/workflows/skill-health.yml`) so upstream drift surfaces as a notification rather than as
-a silently degraded agent. One test is an expected failure — see "Known gaps" in the README.
+(`.github/workflows/skill-health.yml`), which also re-resolves dependencies at their latest
+versions, so upstream drift surfaces as a notification rather than as a silently degraded agent. One test is an expected failure — see "Known gaps" in the README.
 
 ## Releasing
 
-Pushing to `main` runs the tests and publishes to PyPI via Trusted Publishing, stamping the
-version as `0.1.<run number>`. Do not hand-edit the version in `pyproject.toml`.
+Nothing is published. This package is consumed from a checkout. If that changes, mirror the
+`publish.yml` workflow the sibling repos use, which stamps `0.1.<run number>` and relies on PyPI
+Trusted Publishing.

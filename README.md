@@ -17,26 +17,7 @@ here — update a skill upstream and every `accord` notebook picks it up on its 
 
 ## Installation
 
-```bash
-pip install accord-beaker
-```
-
-Then start Beaker and choose the **accord** context:
-
-```bash
-beaker notebook
-```
-
-Confirm the context registered:
-
-```bash
-beaker context list        # should list 'accord'
-```
-
-If this is your first time using Beaker, run `beaker config update` first and set
-`LLM_SERVICE_TOKEN` to your provider's API key.
-
-### Installing from a checkout
+Not published to PyPI — install from the repository:
 
 ```bash
 git clone https://github.com/accord-research/accord-beaker.git
@@ -44,10 +25,39 @@ cd accord-beaker
 uv sync --extra dev
 ```
 
+Then start Beaker and choose the **accord** context:
+
+```bash
+uv run beaker notebook
+```
+
+Confirm the context registered:
+
+```bash
+uv run beaker context list        # should list 'accord'
+```
+
+If this is your first time using Beaker, run `beaker config update` first and set
+`llm_service_token` to your provider's API key.
+
 `rosetta` pulls in `sheerwater`, which hard-pins `zarr==2.18.3` and conflicts with `icechunk`.
 This project carries the same `[tool.uv] override-dependencies` rosetta does, so the environment
 resolves cleanly under `uv`. Under plain `pip` you may need `pip install 'zarr>=3.1.0'` afterwards.
 The pin is stale — sheerwater reads through xarray's zarr backend and works under zarr 3.
+
+### Everything upstream floats
+
+`accord-rosetta` and `accord-deepscale` are declared with no version constraints, and the skills
+are fetched from `main`. A notebook picks up upstream changes without a commit here. The committed
+`uv.lock` therefore is not what production behavior tracks — it exists so local dev and PR CI are
+reproducible. Refresh it with:
+
+```bash
+uv lock --upgrade
+```
+
+The daily `Upstream health` workflow does exactly that and runs the full suite against whatever
+resolves, so an upstream release that breaks this context surfaces there.
 
 ## What the context gives you
 
@@ -87,9 +97,9 @@ segment. A skill does **not** need its own repository; a URL pointing into a sub
 
 **These URLs track `main` and are not pinned.** That is deliberate: skills stay current without a
 release here. The cost is that an upstream change reaches every notebook immediately. To pin,
-replace `main` with a tag or commit SHA. The scheduled `skill-health` workflow fetches both skills
-daily, so upstream breakage surfaces as a failed run rather than as an agent that quietly stops
-mentioning a library.
+replace `main` with a tag or commit SHA. The daily `Upstream health` workflow re-resolves
+dependencies and fetches both skills, so upstream breakage surfaces as a failed run rather than as
+an agent that quietly stops mentioning a library.
 
 ## Known gaps
 

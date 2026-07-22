@@ -1,10 +1,17 @@
-name: Skill health
+name: Upstream health
 
-# The agent's skills are fetched from rosetta and deepscale `main` at session
-# start, so upstream changes reach every notebook with no release here. Beaker
-# drops a skill it cannot load without surfacing an error, which means a broken
-# or moved skill degrades the agent silently. This job is the alarm: it fetches
-# both skills for real and fails loudly when one stops resolving.
+# Everything upstream of this package floats. The agent's skills are fetched
+# from rosetta and deepscale `main` at session start, and the two libraries
+# themselves are declared without version constraints, so a notebook can change
+# behavior with no commit here at all.
+#
+# That is the intent, but it means the committed lockfile is not what users run.
+# This job resolves dependencies fresh, then exercises the full suite including
+# the live skill fetches -- so an upstream release or a moved skill surfaces as a
+# failed run rather than as an agent that has quietly stopped working.
+#
+# Beaker drops a skill it cannot load without raising, which is exactly why this
+# needs to be checked on a schedule rather than trusted to fail loudly on its own.
 
 on:
   schedule:
@@ -16,7 +23,7 @@ on:
       - ".github/workflows/skill-health.yml"
 
 jobs:
-  fetch-skills:
+  upstream:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,8 +32,14 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install dependencies
+      - name: Resolve dependencies at their latest versions
+        run: uv lock --upgrade
+
+      - name: Show what resolved
+        run: uv pip list 2>/dev/null | grep -Ei "accord-|beaker" || true
+
+      - name: Install
         run: uv sync --extra dev
 
-      - name: Fetch the live skills
-        run: uv run pytest -q -m network
+      - name: Run the full suite against latest everything
+        run: uv run pytest -q

@@ -20,9 +20,14 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Atmospheric Science",
 ]
 dependencies = [
+  # Pinned to the 2.0.x line: the context API this package builds on (skills.json
+  # discovery, procedures, system_preamble) is not yet stable across minors.
   "beaker-notebook~=2.0.9",
-  "accord-rosetta>=0.1.5",
-  "accord-deepscale>=0.1.5",
+  # Deliberately unconstrained. These track the same libraries whose skills this
+  # context loads from `main`, and a version floor here would be the one thing
+  # holding a notebook back from the behavior its skill documents.
+  "accord-rosetta",
+  "accord-deepscale",
 ]
 
 [project.urls]
