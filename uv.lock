@@ -47,7 +47,7 @@ provides-extras = ["dev"]
 
 [[package]]
 name = "accord-deepscale"
-version = "0.1.10"
+version = "0.1.12"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cartopy" },
@@ -62,14 +62,14 @@ dependencies = [
     { name = "tqdm" },
     { name = "xarray" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/2e/ec/0a45cedc168cd8634ace863348d7541f3f244c4e264fcd0546eae7c8d54f/accord_deepscale-0.1.10.tar.gz", hash = "sha256:2189bcd7c40379fcbaf9c02072313e92a3d28c3ef9ae9fe46d4f80580177d762", size = 1279916, upload-time = "2026-07-24T21:36:38.551Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/0c/a6/8016ca8f4d1ebac1e3a6fb6e6d14c2e2e7440b6539fed5ad5dba29ba498d/accord_deepscale-0.1.12.tar.gz", hash = "sha256:0726422acc6b9a1395c88d56c6ec833b389264137c877a298c7ee0f7fa187bb3", size = 1284816, upload-time = "2026-08-03T19:50:45.296Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e5/1d/70a3f3e331eea8abf7c625d5ce49ec5df54269b2e30df9b2565cd542b632/accord_deepscale-0.1.10-py3-none-any.whl", hash = "sha256:a0be0815baf92333d2b40ccef0f7b37ed758fcb59fb2ec7b054d639bdc456050", size = 188130, upload-time = "2026-07-24T21:36:36.673Z" },
+    { url = "https://files.pythonhosted.org/packages/26/b2/84454df1c74738e029ef0e0cd5dd3416e7ad92fe3b8135d705505a36a941/accord_deepscale-0.1.12-py3-none-any.whl", hash = "sha256:9e28f8e5009a77cfe17d963a83d703265d6fea3053a5002517ca92bc06f45a75", size = 191193, upload-time = "2026-08-03T19:50:43.665Z" },
 ]
 
 [[package]]
 name = "accord-rosetta"
-version = "0.1.9"
+version = "0.1.11"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cdsapi" },
@@ -86,9 +86,9 @@ dependencies = [
     { name = "tqdm" },
     { name = "xarray" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/0c/72/24dfd9e400767181afa18004ea639469e6fd1ce51e89d7e623707687bce6/accord_rosetta-0.1.9.tar.gz", hash = "sha256:5b59735f066f89f30ac44866358379136da0a1737339bff18309a29a59e23339", size = 484724, upload-time = "2026-07-24T21:37:15.426Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1b/97/8115b635db7e1deb7d2846797d8e9b995d4232ccda3488d5d287f42c7095/accord_rosetta-0.1.11.tar.gz", hash = "sha256:ea64c841334dc92eae745bc203c36370a152c8448474bd8cb6f3ec7c5c00deb5", size = 490508, upload-time = "2026-08-03T19:44:10.474Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a9/ee/b9dca6ce5fe1738a0dd56de1719913a6af6fb373dfc0b5a94507a63889c6/accord_rosetta-0.1.9-py3-none-any.whl", hash = "sha256:190c3064915e4309224cf34fa18ea4726b073e63fcda39aa27156a2996a805b3", size = 93952, upload-time = "2026-07-24T21:37:13.746Z" },
+    { url = "https://files.pythonhosted.org/packages/2f/99/5d8506d9b09534ff04d85f8bfc4e7e18ffced5179816ac32d83c0c6d42b3/accord_rosetta-0.1.11-py3-none-any.whl", hash = "sha256:1b83fa74af5e101a03d8effadad4d2721079d980288b129e2f20f081bd96f58f", size = 100697, upload-time = "2026-08-03T19:44:08.902Z" },
 ]
 
 [[package]]
