@@ -14,14 +14,14 @@ _accord_loaded = []
 _accord_missing = {}
 
 try:
-    import rosetta
+    import acmaddl
 
     _accord_loaded.append("rosetta")
 except Exception as err:  # noqa: BLE001 - report at startup, never raise
     _accord_missing["rosetta"] = f"{type(err).__name__}: {err}"
 
 try:
-    import deepscale as ds
+    import africas2s as ds
 
     _accord_loaded.append("deepscale")
 except Exception as err:  # noqa: BLE001

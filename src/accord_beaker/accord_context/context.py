@@ -111,8 +111,8 @@ class AccordContext(BeakerContext):
             "assuming a name is bound.\n\n"
             "Canonical array shapes across the two libraries: GCM hindcasts are "
             "`(year, member, lat, lon)`, observations are `(year, lat, lon)`, and tercile forecasts "
-            "are `(tercile, lat, lon)` with terciles ordered below/normal/above. `rosetta.fetch(..., "
-            "year_index=True)` and `rosetta.assemble(...)` produce exactly the shapes deepscale "
+            "are `(tercile, lat, lon)` with terciles ordered below/normal/above. `acmaddl.fetch(..., "
+            "year_index=True)` and `acmaddl.assemble(...)` produce exactly the shapes deepscale "
             "consumes.\n\n"
             "Consult the rosetta and deepscale skills before writing code against either library."
         )
