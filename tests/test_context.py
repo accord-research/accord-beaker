@@ -66,7 +66,7 @@ def test_context_and_agent_carry_prompts():
     """Both docstrings are fed to the LLM, so an empty one is a silent defect."""
     assert AccordContext.__doc__ and AccordContext.__doc__.strip()
     assert AccordAgent.__doc__ and AccordAgent.__doc__.strip()
-    for library in ("rosetta", "deepscale"):
+    for library in ("acmaddl", "africas2s"):
         assert library in AccordAgent.__doc__
 
 
@@ -107,7 +107,7 @@ def test_required_procedures_are_valid_python_and_jinja(context_dir, name):
 
 
 def test_setup_procedure_tolerates_missing_libraries(context_dir):
-    """The preamble must not raise when rosetta or deepscale are absent.
+    """The preamble must not raise when acmaddl or africas2s are absent.
 
     A forecaster with a partial install should still get a usable notebook.
     Executing it here is the only honest way to check that.
@@ -121,21 +121,21 @@ def test_setup_procedure_tolerates_missing_libraries(context_dir):
     assert isinstance(namespace["_accord_missing"], dict)
     # Every library is accounted for as either loaded or explained.
     assert set(namespace["_accord_loaded"]) | set(namespace["_accord_missing"]) == {
-        "rosetta",
-        "deepscale",
+        "acmaddl",
+        "africas2s",
     }
 
 
 def test_environment_procedure_reports_credentials(context_dir):
     """The preview must describe credentials without ever reading them."""
     source = (context_dir / "procedures" / "python3" / "environment.py").read_text(encoding="utf-8")
-    namespace: dict = {"_accord_loaded": ["rosetta"], "_accord_missing": {"deepscale": "boom"}}
+    namespace: dict = {"_accord_loaded": ["acmaddl"], "_accord_missing": {"africas2s": "boom"}}
     exec(compile(source, "environment.py", "exec"), namespace)  # noqa: S102 - fixture under test
     environment = namespace["_accord_environment"]()
 
-    assert set(environment["packages"]) == {"rosetta", "deepscale"}
+    assert set(environment["packages"]) == {"acmaddl", "africas2s"}
     assert "~/.cdsapirc" in environment["credentials"]
     for entry in environment["credentials"].values():
         assert set(entry) == {"present", "used_for"}
         assert isinstance(entry["present"], bool)
-    assert environment["import_errors"] == {"deepscale": "boom"}
+    assert environment["import_errors"] == {"africas2s": "boom"}

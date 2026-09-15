@@ -1,7 +1,7 @@
 # Report what the ACCORD stack looks like in this subkernel, for the preview
 # panel. Returns a plain JSON-serializable dict as the cell's value.
 #
-# The credential block is the point of this procedure. rosetta reaches
+# The credential block is the point of this procedure. acmaddl reaches
 # Copernicus, ECMWF and IRI, each with its own dotfile, and a missing one
 # surfaces as a 403 partway through a slow request. Showing presence up front
 # turns that into something the forecaster can fix before starting.
@@ -12,7 +12,7 @@ def _accord_environment():
     from pathlib import Path
 
     packages = {}
-    for dist, module in (("accord-rosetta", "rosetta"), ("accord-deepscale", "deepscale")):
+    for dist, module in (("acmadDL", "acmaddl"), ("africas2s", "africas2s")):
         try:
             packages[module] = version(dist)
         except PackageNotFoundError:
