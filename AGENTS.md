@@ -1,8 +1,8 @@
 # Working in accord-beaker
 
 This repo is a Beaker **context package**: a thin Python package whose job is to configure an AI
-agent, not to implement climate science. The science lives in `accord-rosetta` and
-`accord-deepscale`. Keep it that way — if you find yourself writing forecasting logic here, it
+agent, not to implement climate science. The science lives in `acmadDL` and
+`africas2s`. Keep it that way — if you find yourself writing forecasting logic here, it
 belongs upstream.
 
 ## What matters here
@@ -14,9 +14,9 @@ everything here occupies context whether or not the session needs it. Detail bel
 upstream skills, which load on demand.
 
 **Skills are loaded remotely, from `main`.** `skills.json` points at raw GitHub URLs in the
-rosetta and deepscale repos. There is no vendored copy. Consequences worth remembering:
+acmadDL and africas2s repos. There is no vendored copy. Consequences worth remembering:
 
-- Editing a skill means opening a PR on rosetta or deepscale, not on this repo.
+- Editing a skill means opening a PR on acmadDL or africas2s, not on this repo.
 - A skill change is live in every notebook on the next session, with no release here.
 - A fetch failure is silent — Beaker logs at debug and returns zero skills. If the agent seems
   unaware of a library, suspect the fetch before suspecting the prompt.

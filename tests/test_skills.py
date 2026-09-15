@@ -1,4 +1,4 @@
-"""The rosetta and deepscale skills reach the agent.
+"""The acmaddl and africas2s skills reach the agent.
 
 The skills are loaded remotely at runtime, straight from the source repos, so
 these split into two groups:
@@ -18,7 +18,7 @@ import pytest
 from beaker_notebook.lib.integrations.skill import parse_skill_md
 from beaker_notebook.lib.integrations.types import SkillExampleResource, SkillFileResource
 
-EXPECTED_SKILLS = {"rosetta", "deepscale"}
+EXPECTED_SKILLS = {"acmaddl", "africas2s"}
 
 
 # --------------------------------------------------------------------------
@@ -117,8 +117,8 @@ def test_context_exposes_only_its_own_skills():
 
     Beaker offers every context the skills in ~/.beaker/skills and friends. On a
     machine with a large personal skill library that is both a large permanent
-    prompt cost and a retrieval problem -- the agent has to find rosetta and
-    deepscale among everything else.
+    prompt cost and a retrieval problem -- the agent has to find acmaddl and
+    africas2s among everything else.
     """
     from accord_beaker.accord_context.context import AccordContext
 

@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "accord-beaker"
 version = "0.1.0"
-description = "Beaker notebook context for ACCORD seasonal climate forecasting, pairing the rosetta and deepscale agent skills"
+description = "Beaker notebook context for ACCORD seasonal climate forecasting, pairing the acmadDL and africas2s agent skills"
 readme = "README.md"
 requires-python = ">=3.12"
 license = "MIT"
@@ -26,8 +26,8 @@ dependencies = [
   # Deliberately unconstrained. These track the same libraries whose skills this
   # context loads from `main`, and a version floor here would be the one thing
   # holding a notebook back from the behavior its skill documents.
-  "accord-rosetta",
-  "accord-deepscale",
+  "acmadDL",
+  "africas2s",
 ]
 
 [project.urls]
@@ -39,8 +39,8 @@ Issues = "https://github.com/accord-research/accord-beaker/issues"
 dev = ["pytest", "pytest-asyncio"]
 
 [tool.uv]
-# rosetta's dependency set is not satisfiable out of the box: sheerwater
-# hard-pins zarr==2.18.3 while icechunk>=2 needs zarr>=3.1.0. rosetta carries
+# acmadDL's dependency set is not satisfiable out of the box: sheerwater
+# hard-pins zarr==2.18.3 while icechunk>=2 needs zarr>=3.1.0. acmadDL carries
 # this same override, but `uv pip install` reads overrides from the project in
 # the working directory rather than from the package being installed, so every
 # downstream consumer has to repeat it. sheerwater's pin is stale -- it reads

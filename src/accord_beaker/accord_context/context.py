@@ -18,7 +18,7 @@ class AccordContext(BeakerContext):
     """
     ACCORD seasonal climate forecasting.
 
-    Pairs the rosetta data-acquisition library with the deepscale downscaling,
+    Pairs the acmadDL data-acquisition library with the africas2s downscaling,
     calibration and verification library, and gives the agent the Agent Skills
     published alongside both. Use it to fetch GCM hindcasts and observations,
     build calibrated tercile forecasts, and score them under cross-validation.
@@ -56,7 +56,7 @@ class AccordContext(BeakerContext):
         or more unrelated skills, and every one of their descriptions is
         injected into the system prompt on every session -- measured at ~24k
         tokens on one real machine. The cost is not only the tokens. The agent
-        has to pick rosetta and deepscale out of that field, and skills whose
+        has to pick acmaddl and africas2s out of that field, and skills whose
         descriptions overlap on words like "data" or "forecast" are a genuine
         source of wrong turns.
 
@@ -87,7 +87,7 @@ class AccordContext(BeakerContext):
         """Import the ACCORD stack into the subkernel so it is ready to use.
 
         Failure here is not fatal: the imports are a convenience, and a user
-        without cartopy (or without deepscale at all) should still get a working
+        without cartopy (or without africas2s at all) should still get a working
         notebook rather than a context that refuses to start. The agent can
         always import what it needs itself.
         """
@@ -100,28 +100,28 @@ class AccordContext(BeakerContext):
     async def system_preamble(self) -> Optional[str]:
         """Domain framing cached for the lifetime of the session.
 
-        Deliberately short. The substance lives in the rosetta and deepscale
+        Deliberately short. The substance lives in the acmaddl and africas2s
         skills, which the agent loads on demand -- restating it here would
         occupy context whether or not the session ever touches those libraries.
         """
         return (
             "This notebook is set up for ACCORD seasonal climate forecasting. The subkernel has "
-            "already imported `xarray as xr`, `numpy as np`, `rosetta`, and `deepscale as ds` where "
+            "already imported `xarray as xr`, `numpy as np`, `acmaddl`, and `africas2s as ds` where "
             "each is installed; check the Environment preview for what actually loaded before "
             "assuming a name is bound.\n\n"
             "Canonical array shapes across the two libraries: GCM hindcasts are "
             "`(year, member, lat, lon)`, observations are `(year, lat, lon)`, and tercile forecasts "
             "are `(tercile, lat, lon)` with terciles ordered below/normal/above. `acmaddl.fetch(..., "
-            "year_index=True)` and `acmaddl.assemble(...)` produce exactly the shapes deepscale "
+            "year_index=True)` and `acmaddl.assemble(...)` produce exactly the shapes africas2s "
             "consumes.\n\n"
-            "Consult the rosetta and deepscale skills before writing code against either library."
+            "Consult the acmaddl and africas2s skills before writing code against either library."
         )
 
     async def generate_preview(self):
         """Show which parts of the ACCORD stack and which credentials are live.
 
         Missing or misconfigured credentials are the most common reason a
-        rosetta fetch fails, and the failure surfaces late -- after a long
+        acmaddl fetch fails, and the failure surfaces late -- after a long
         request -- so it is worth showing up front.
         """
         try:

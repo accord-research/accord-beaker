@@ -2,9 +2,9 @@
 
 A [Beaker notebook](https://github.com/jataware/beaker-notebook) context for seasonal climate
 forecasting. Install it, start Beaker, and you get a notebook whose AI agent already knows how to
-drive the two ACCORD libraries — [`rosetta`](https://github.com/accord-research/rosetta) for
+drive the two ACCORD libraries — [`acmadDL`](https://github.com/ACMAD-Niamey/acmadDL) for
 fetching and normalizing climate data, and
-[`deepscale`](https://github.com/accord-research/deepscale) for downscaling, calibrating and
+[`africas2s`](https://github.com/ACMAD-Niamey/africas2s) for downscaling, calibrating and
 verifying forecasts.
 
 You describe the forecast you want; it writes and runs the code.
@@ -76,7 +76,7 @@ from their repositories at session start — so a skill improved upstream reache
 next session with no upgrade here. It reads them only when a task needs them, so they cost almost
 nothing otherwise.
 
-The subkernel starts with `xarray as xr`, `numpy as np`, `rosetta` and `deepscale as ds` already
+The subkernel starts with `xarray as xr`, `numpy as np`, `acmaddl` and `africas2s as ds` already
 imported, and the preview panel shows which data-provider credentials you have.
 
 More detail, and notes for anyone modifying this package, live in [AGENTS.md](AGENTS.md).
